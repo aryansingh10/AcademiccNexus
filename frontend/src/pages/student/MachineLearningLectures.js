@@ -4,12 +4,12 @@ const MachineLearningLectures = () => {
     // Define an array of lecture data with titles and YouTube video IDs
     const lectures = [
       
-        { title: 'Real Numbers', videoId: 'QPfYlmiqChY' },
-        { title: 'Introduction to Polynomials ', videoId: 'vq5qbZwP20s' },
-        { title: 'Introduction to Pair of Linear Eq in Two Variables', videoId: 'LytMwKXqI78' },
+        { title: 'Indefinite Integration Part01', videoId:'LytMwKXqI78' },
+        { title: 'Indefinite Integration Part02', videoId:'QPfYlmiqChY' },
+        { title: 'Indefinite Integration Part03', videoId: 'vq5qbZwP20s' },
         
     
-      
+    
     ];
 
     return (
