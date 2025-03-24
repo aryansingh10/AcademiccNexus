@@ -1,5 +1,5 @@
 // models/lecture.js
-
+//hello
 const mongoose = require('mongoose');
 
 const lectureSchema = new mongoose.Schema({
