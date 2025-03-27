@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
-const Student = require("../models/studentSchema.js");
-const Subject = require("../models/subjectSchema.js");
+const bcrypt = require('bcrypt');
+const Student = require('../models/studentSchema.js');
+const Subject = require('../models/subjectSchema.js');
 
 const studentRegister = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ const studentRegister = async (req, res) => {
     });
 
     if (existingStudent) {
-      res.send({ message: "Roll Number already exists" });
+      res.send({ message: 'Roll Number already exists' });
     } else {
       const student = new Student({
         ...req.body,
@@ -44,17 +44,17 @@ const studentLogIn = async (req, res) => {
         student.password
       );
       if (validated) {
-        student = await student.populate("school", "schoolName");
-        student = await student.populate("sclassName", "sclassName");
+        student = await student.populate('school', 'schoolName');
+        student = await student.populate('sclassName', 'sclassName');
         student.password = undefined;
         student.examResult = undefined;
         student.attendance = undefined;
         res.send(student);
       } else {
-        res.send({ message: "Invalid password" });
+        res.send({ message: 'Invalid password' });
       }
     } else {
-      res.send({ message: "Student not found" });
+      res.send({ message: 'Student not found' });
     }
   } catch (err) {
     res.status(500).json(err);
@@ -64,8 +64,8 @@ const studentLogIn = async (req, res) => {
 const getStudents = async (req, res) => {
   try {
     let students = await Student.find({ school: req.params.id }).populate(
-      "sclassName",
-      "sclassName"
+      'sclassName',
+      'sclassName'
     );
     if (students.length > 0) {
       let modifiedStudents = students.map((student) => {
@@ -73,7 +73,7 @@ const getStudents = async (req, res) => {
       });
       res.send(modifiedStudents);
     } else {
-      res.send({ message: "No students found" });
+      res.send({ message: 'No students found' });
     }
   } catch (err) {
     res.status(500).json(err);
@@ -83,15 +83,15 @@ const getStudents = async (req, res) => {
 const getStudentDetail = async (req, res) => {
   try {
     let student = await Student.findById(req.params.id)
-      .populate("school", "schoolName")
-      .populate("sclassName", "sclassName")
-      .populate("examResult.subName", "subName")
-      .populate("attendance.subName", "subName sessions");
+      .populate('school', 'schoolName')
+      .populate('sclassName', 'sclassName')
+      .populate('examResult.subName', 'subName')
+      .populate('attendance.subName', 'subName sessions');
     if (student) {
       student.password = undefined;
       res.send(student);
     } else {
-      res.send({ message: "No student found" });
+      res.send({ message: 'No student found' });
     }
   } catch (err) {
     res.status(500).json(err);
@@ -111,7 +111,7 @@ const deleteStudents = async (req, res) => {
   try {
     const result = await Student.deleteMany({ school: req.params.id });
     if (result.deletedCount === 0) {
-      res.send({ message: "No students found to delete" });
+      res.send({ message: 'No students found to delete' });
     } else {
       res.send(result);
     }
@@ -124,7 +124,7 @@ const deleteStudentsByClass = async (req, res) => {
   try {
     const result = await Student.deleteMany({ sclassName: req.params.id });
     if (result.deletedCount === 0) {
-      res.send({ message: "No students found to delete" });
+      res.send({ message: 'No students found to delete' });
     } else {
       res.send(result);
     }
@@ -158,7 +158,7 @@ const updateExamResult = async (req, res) => {
     const student = await Student.findById(req.params.id);
 
     if (!student) {
-      return res.send({ message: "Student not found" });
+      return res.send({ message: 'Student not found' });
     }
 
     const existingResult = student.examResult.find(
@@ -168,7 +168,7 @@ const updateExamResult = async (req, res) => {
     if (existingResult) {
       existingResult.marksObtained = marksObtained;
     } else {
-      student.examResult.push({ subName, marksObtained,totalMarks });
+      student.examResult.push({ subName, marksObtained, totalMarks });
     }
 
     const result = await student.save();
@@ -185,7 +185,7 @@ const studentAttendance = async (req, res) => {
     const student = await Student.findById(req.params.id);
 
     if (!student) {
-      return res.send({ message: "Student not found" });
+      return res.send({ message: 'Student not found' });
     }
 
     const subject = await Subject.findById(subName);
@@ -205,7 +205,7 @@ const studentAttendance = async (req, res) => {
       ).length;
 
       if (attendedSessions >= subject.sessions) {
-        return res.send({ message: "Maximum attendance limit reached" });
+        return res.send({ message: 'Maximum attendance limit reached' });
       }
 
       student.attendance.push({ date, status, subName });
@@ -223,7 +223,7 @@ const clearAllStudentsAttendanceBySubject = async (req, res) => {
 
   try {
     const result = await Student.updateMany(
-      { "attendance.subName": subName },
+      { 'attendance.subName': subName },
       { $pull: { attendance: { subName } } }
     );
     return res.send(result);
