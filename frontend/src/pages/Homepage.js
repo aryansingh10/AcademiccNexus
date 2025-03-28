@@ -6,81 +6,37 @@ import CoolStudents from '../assets/college.jpg'; // Add a stylish student image
 import { LightPurpleButton } from '../components/buttonStyles';
 
 const Homepage = () => {
-    return (
-        <StyledContainer>
-            <Grid container spacing={0}>
-                <Grid item xs={12} md={6}>
-                    <img src={Students} alt="students" style={{ width: '100%' }} />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <StyledPaper elevation={3}>
-                        <StyledTitle>
-                            Welcome to
-                            <br />
-                            Academic 
-                            <br />
-                            Nexus
-                        </StyledTitle>
-                        <StyledText>
-                          
-Streamline school administration, class organization, and add students and faculty.
-Seamlessly monitor attendance, assess performance, and provide feedback.
-Access records, view grades, and communicate effortlessly.
-                        </StyledText>
-                        <StyledBox>
-                            <StyledLink to="/choose">
-                                <LightPurpleButton variant="contained" fullWidth>
-                                    Login
-                                </LightPurpleButton>
-                            </StyledLink>
-                            <StyledLink to="/chooseasguest">
-                            
-                            </StyledLink>
-                            <StyledText>
-                                Don't have an account?{' '}
-                                <Link to="/Adminregister" style={{color:"#550080"}}>
-                                    Sign up
-                                </Link>
-                            </StyledText>
-                        </StyledBox>
-                    </StyledPaper>
-                </Grid>
-            </Grid>
-        </StyledContainer>
-
   return (
     <StyledContainer>
-      <Grid container spacing={0} alignItems="center">
+      <Grid container spacing={0}>
         <Grid item xs={12} md={6}>
-          <StyledImage src={CoolStudents} alt="Cool Students" />
+          <img src={CoolStudents} alt="students" style={{ width: '100%' }} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <StyledPaper>
+          <StyledPaper elevation={3}>
             <StyledTitle>
-              Welcome to <br />
-
-              <span>Smart Learn</span>
-
-              <span>Academic Nexus</span>
-
+              Welcome to
+              <br />
+              Academic
+              <br />
+              Nexus
             </StyledTitle>
             <StyledText>
-              Simplify school management, connect with faculty and students
-              seamlessly. Monitor attendance, track performance, and enhance
-              communication with ease.
+              Streamline school administration, class organization, and add
+              students and faculty. Seamlessly monitor attendance, assess
+              performance, and provide feedback. Access records, view grades,
+              and communicate effortlessly.
             </StyledText>
             <StyledBox>
               <StyledLink to="/choose">
                 <LightPurpleButton variant="contained" fullWidth>
-                  Get Started
+                  Login
                 </LightPurpleButton>
               </StyledLink>
+              <StyledLink to="/chooseasguest"></StyledLink>
               <StyledText>
-                New here?{' '}
-                <Link
-                  to="/Adminregister"
-                  style={{ color: '#550080', fontWeight: 'bold' }}
-                >
+                Don't have an account?{' '}
+                <Link to="/Adminregister" style={{ color: '#550080' }}>
                   Sign up
                 </Link>
               </StyledText>
@@ -90,7 +46,6 @@ Access records, view grades, and communicate effortlessly.
       </Grid>
     </StyledContainer>
   );
-
 };
 
 export default Homepage;
