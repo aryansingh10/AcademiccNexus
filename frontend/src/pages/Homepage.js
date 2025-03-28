@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Box, Button } from '@mui/material';
+import { Container, Grid, Box } from '@mui/material';
 import styled from 'styled-components';
-import Students from "../assets/students.svg";
+import CoolStudents from '../assets/college.jpg'; // Add a stylish student image
 import { LightPurpleButton } from '../components/buttonStyles';
 
 const Homepage = () => {
-<<<<<<< Updated upstream
     return (
         <StyledContainer>
             <Grid container spacing={0}>
@@ -48,8 +47,7 @@ Access records, view grades, and communicate effortlessly.
                 </Grid>
             </Grid>
         </StyledContainer>
-    );
-=======
+
   return (
     <StyledContainer>
       <Grid container spacing={0} alignItems="center">
@@ -60,7 +58,11 @@ Access records, view grades, and communicate effortlessly.
           <StyledPaper>
             <StyledTitle>
               Welcome to <br />
+
               <span>Smart Learn</span>
+
+              <span>Academic Nexus</span>
+
             </StyledTitle>
             <StyledText>
               Simplify school management, connect with faculty and students
@@ -88,7 +90,7 @@ Access records, view grades, and communicate effortlessly.
       </Grid>
     </StyledContainer>
   );
->>>>>>> Stashed changes
+
 };
 
 export default Homepage;
@@ -98,40 +100,48 @@ const StyledContainer = styled(Container)`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background: linear-gradient(to right, #f8f9fa, #e3e7fc);
+  padding: 20px;
 `;
 
 const StyledPaper = styled.div`
-  padding: 24px;
-  height: 100vh;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 `;
 
 const StyledBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content:center;
   gap: 16px;
-  padding: 24px;
+  margin-top: 20px;
 `;
 
 const StyledTitle = styled.h1`
-  font-size: 3rem;
+  font-size: 2.8rem;
   color: #252525;
-  /* font-family: "Manrope"; */
   font-weight: bold;
-  padding-top: 0;
-  letter-spacing: normal;
-  line-height: normal;
+  span {
+    color: #550080;
+  }
 `;
 
 const StyledText = styled.p`
-  /* color: #550080; */
-  margin-top: 30px;
-  margin-bottom: 30px; 
-  letter-spacing: normal;
-  line-height: normal;
+  font-size: 1.1rem;
+  color: #555;
+  margin: 20px 0;
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  width: 100%;
+`;
+
+const StyledImage = styled.img`
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
