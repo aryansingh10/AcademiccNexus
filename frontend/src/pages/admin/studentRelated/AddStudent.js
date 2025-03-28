@@ -5,7 +5,16 @@ import { registerUser } from "../../../redux/userRelated/userHandle";
 import Popup from "../../../components/Popup";
 import { underControl } from "../../../redux/userRelated/userSlice";
 import { getAllSclasses } from "../../../redux/sclassRelated/sclassHandle";
-import { CircularProgress } from "@mui/material";
+import {
+  Container,
+  TextField,
+  MenuItem,
+  Button,
+  Typography,
+  Box,
+  CircularProgress,
+  Paper,
+} from "@mui/material";
 
 const AddStudent = ({ situation }) => {
   const dispatch = useDispatch();
@@ -68,11 +77,10 @@ const AddStudent = ({ situation }) => {
   const submitHandler = (event) => {
     event.preventDefault();
     if (sclassName === "") {
-      setMessage("Please select a classname");
+      setMessage("Please select a class name");
       setShowPopup(true);
     } else {
       setLoader(true);
-      console.log("the field is ",fields)
       dispatch(registerUser(fields, role));
     }
   };
@@ -93,81 +101,88 @@ const AddStudent = ({ situation }) => {
   }, [status, navigate, error, response, dispatch]);
 
   return (
-    <>
-      <div className="register">
-        <form className="registerForm" onSubmit={submitHandler}>
-          <span className="registerTitle">Add Student</span>
-          <label>Name</label>
-          <input
-            className="registerInput"
-            type="text"
-            placeholder="Enter student's name..."
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ padding: 4, marginTop: 5, borderRadius: 2 }}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Add Student
+        </Typography>
+        <form onSubmit={submitHandler}>
+          <TextField
+            fullWidth
+            label="Name"
+            variant="outlined"
+            margin="normal"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            autoComplete="name"
             required
           />
 
           {situation === "Student" && (
-            <>
-              <label>Class</label>
-              <select
-                className="registerInput"
-                value={className}
-                onChange={changeHandler}
-                required
-              >
-                <option value="Select Class">Select Class</option>
-                {sclassesList.map((classItem, index) => (
-                  <option key={index} value={classItem.sclassName}>
-                    {classItem.sclassName}
-                  </option>
-                ))}
-              </select>
-            </>
+            <TextField
+              fullWidth
+              select
+              label="Class"
+              variant="outlined"
+              margin="normal"
+              value={className}
+              onChange={changeHandler}
+              required
+            >
+              <MenuItem value="Select Class">Select Class</MenuItem>
+              {sclassesList.map((classItem, index) => (
+                <MenuItem key={index} value={classItem.sclassName}>
+                  {classItem.sclassName}
+                </MenuItem>
+              ))}
+            </TextField>
           )}
 
-          <label>Email</label>
-          <input
-            className="registerInput"
+          <TextField
+            fullWidth
+            label="Email"
+            variant="outlined"
+            margin="normal"
             type="email"
-            placeholder="Enter student's email..."
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
-          <label>Roll Number</label>
-          <input
-            className="registerInput"
+          <TextField
+            fullWidth
+            label="Roll Number"
+            variant="outlined"
+            margin="normal"
             type="number"
-            placeholder="Enter student's Roll Number..."
             value={rollNum}
             onChange={(event) => setRollNum(event.target.value)}
             required
           />
-
-          <label>Password</label>
-          <input
-            className="registerInput"
+          <TextField
+            fullWidth
+            label="Password"
+            variant="outlined"
+            margin="normal"
             type="password"
-            placeholder="Enter student's password..."
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            autoComplete="new-password"
             required
           />
 
-          <button className="registerButton" type="submit" disabled={loader}>
-            {loader ? <CircularProgress size={24} color="inherit" /> : "Add"}
-          </button>
+          <Box mt={2} display="flex" justifyContent="center">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={loader}
+              sx={{ width: "50%" }}
+            >
+              {loader ? <CircularProgress size={24} color="inherit" /> : "Add"}
+            </Button>
+          </Box>
         </form>
-      </div>
-      <Popup
-        message={message}
-        setShowPopup={setShowPopup}
-        showPopup={showPopup}
-      />
-    </>
+      </Paper>
+      <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
+    </Container>
   );
 };
 

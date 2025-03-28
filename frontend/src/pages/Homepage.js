@@ -6,6 +6,7 @@ import Students from "../assets/students.svg";
 import { LightPurpleButton } from '../components/buttonStyles';
 
 const Homepage = () => {
+<<<<<<< Updated upstream
     return (
         <StyledContainer>
             <Grid container spacing={0}>
@@ -48,6 +49,46 @@ Access records, view grades, and communicate effortlessly.
             </Grid>
         </StyledContainer>
     );
+=======
+  return (
+    <StyledContainer>
+      <Grid container spacing={0} alignItems="center">
+        <Grid item xs={12} md={6}>
+          <StyledImage src={CoolStudents} alt="Cool Students" />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <StyledPaper>
+            <StyledTitle>
+              Welcome to <br />
+              <span>Smart Learn</span>
+            </StyledTitle>
+            <StyledText>
+              Simplify school management, connect with faculty and students
+              seamlessly. Monitor attendance, track performance, and enhance
+              communication with ease.
+            </StyledText>
+            <StyledBox>
+              <StyledLink to="/choose">
+                <LightPurpleButton variant="contained" fullWidth>
+                  Get Started
+                </LightPurpleButton>
+              </StyledLink>
+              <StyledText>
+                New here?{' '}
+                <Link
+                  to="/Adminregister"
+                  style={{ color: '#550080', fontWeight: 'bold' }}
+                >
+                  Sign up
+                </Link>
+              </StyledText>
+            </StyledBox>
+          </StyledPaper>
+        </Grid>
+      </Grid>
+    </StyledContainer>
+  );
+>>>>>>> Stashed changes
 };
 
 export default Homepage;

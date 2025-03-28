@@ -6,10 +6,7 @@ import {
     List,
     Typography,
     Divider,
-    IconButton,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppBar, Drawer } from '../../components/styles';
 import Logout from '../Logout';
@@ -43,130 +40,98 @@ import ShowClasses from './classRelated/ShowClasses';
 import AccountMenu from '../../components/AccountMenu';
 
 const AdminDashboard = () => {
-    const [open, setOpen] = useState(false);
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
-
     return (
-        <>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar open={open} position='absolute'>
-                    <Toolbar sx={{ pr: '24px' }}>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleDrawer}
-                            sx={{
-                                marginRight: '36px',
-                                ...(open && { display: 'none' }),
-                            }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            sx={{ flexGrow: 1 }}
-                        >
-                            Admin Dashboard
-                        </Typography>
-                        <AccountMenu />
+        <Box sx={{ display: 'flex', height: '100vh' }}>
+            <CssBaseline />
+            {/* Permanent Sidebar */}
+            <Drawer variant="permanent" sx={styles.drawerStyled}>
+                <Toolbar sx={styles.toolBarStyled}>
+                    <Typography variant="h6" color="white">
+                        Admin Dashboard
+                    </Typography>
+                </Toolbar>
+                <Divider />
+                <List component="nav">
+                    <SideBar />
+                </List>
+            </Drawer>
+            {/* Main Content */}
+            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                {/* Top Bar without Admin Dashboard Text */}
+                <AppBar position='static' sx={styles.appBarStyled}>
+                    <Toolbar>
+                    <Box sx={{ flexGrow: 1 }} /> 
+                      <AccountMenu />
                     </Toolbar>
                 </AppBar>
-                <Drawer variant="permanent" open={open} sx={open ? styles.drawerStyled : styles.hideDrawer}>
-                    <Toolbar sx={styles.toolBarStyled}>
-                        <IconButton onClick={toggleDrawer}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </Toolbar>
-                    <Divider />
-                    <List component="nav">
-                        <SideBar />
-                    </List>
-                </Drawer>
+                {/* Content Area */}
                 <Box component="main" sx={styles.boxStyled}>
-                    <Toolbar />
                     <Routes>
                         <Route path="/" element={<AdminHomePage />} />
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/Admin/dashboard" element={<AdminHomePage />} />
                         <Route path="/Admin/profile" element={<AdminProfile />} />
                         <Route path="/Admin/complains" element={<SeeComplains />} />
-
-                        {/* Notice */}
                         <Route path="/Admin/addnotice" element={<AddNotice />} />
                         <Route path="/Admin/notices" element={<ShowNotices />} />
-
-                        {/* Subject */}
                         <Route path="/Admin/subjects" element={<ShowSubjects />} />
                         <Route path="/Admin/subjects/subject/:classID/:subjectID" element={<ViewSubject />} />
                         <Route path="/Admin/subjects/chooseclass" element={<ChooseClass situation="Subject" />} />
-
                         <Route path="/Admin/addsubject/:id" element={<SubjectForm />} />
                         <Route path="/Admin/class/subject/:classID/:subjectID" element={<ViewSubject />} />
-
                         <Route path="/Admin/subject/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
                         <Route path="/Admin/subject/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
-
-                        {/* Class */}
                         <Route path="/Admin/addclass" element={<AddClass />} />
                         <Route path="/Admin/classes" element={<ShowClasses />} />
                         <Route path="/Admin/classes/class/:id" element={<ClassDetails />} />
                         <Route path="/Admin/class/addstudents/:id" element={<AddStudent situation="Class" />} />
-
-                        {/* Student */}
                         <Route path="/Admin/addstudents" element={<AddStudent situation="Student" />} />
                         <Route path="/Admin/students" element={<ShowStudents />} />
                         <Route path="/Admin/students/student/:id" element={<ViewStudent />} />
                         <Route path="/Admin/students/student/attendance/:id" element={<StudentAttendance situation="Student" />} />
                         <Route path="/Admin/students/student/marks/:id" element={<StudentExamMarks situation="Student" />} />
-
-                        {/* Teacher */}
                         <Route path="/Admin/teachers" element={<ShowTeachers />} />
                         <Route path="/Admin/teachers/teacher/:id" element={<TeacherDetails />} />
                         <Route path="/Admin/teachers/chooseclass" element={<ChooseClass situation="Teacher" />} />
                         <Route path="/Admin/teachers/choosesubject/:id" element={<ChooseSubject situation="Norm" />} />
                         <Route path="/Admin/teachers/choosesubject/:classID/:teacherID" element={<ChooseSubject situation="Teacher" />} />
                         <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
-
                         <Route path="/logout" element={<Logout />} />
                     </Routes>
                 </Box>
             </Box>
-        </>
+        </Box>
     );
 }
 
-export default AdminDashboard
+export default AdminDashboard;
 
 const styles = {
-    boxStyled: {
-        backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-        flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
+    drawerStyled: {
+        width: '260px',
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+            width: '260px',
+            backgroundColor: '#2C3E50',
+            color: 'white',
+        },
     },
     toolBarStyled: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        px: [1],
+        justifyContent: 'center',
+        padding: '16px',
+        backgroundColor: '#1E88E5',
+        color: 'white',
     },
-    drawerStyled: {
-        display: "flex"
+    appBarStyled: {
+        backgroundColor: '#1E88E5',
+        color: 'white',
     },
-    hideDrawer: {
-        display: 'flex',
-        '@media (max-width: 600px)': {
-            display: 'none',
-        },
+    boxStyled: {
+        flexGrow: 1,
+        backgroundColor: '#f4f6f8',
+        padding: '24px',
+        borderRadius: '10px',
     },
-}
+};

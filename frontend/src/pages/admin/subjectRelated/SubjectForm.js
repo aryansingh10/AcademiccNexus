@@ -1,183 +1,209 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, Grid, Box, Typography, CircularProgress } from "@mui/material";
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { addStuff } from '../../../redux/userRelated/userHandle';
-import { underControl } from '../../../redux/userRelated/userSlice';
-import Popup from '../../../components/Popup';
+import {
+  Button,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Card,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
+import { Add, Remove } from "@mui/icons-material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addStuff } from "../../../redux/userRelated/userHandle";
+import { underControl } from "../../../redux/userRelated/userSlice";
+import Popup from "../../../components/Popup";
 
 const SubjectForm = () => {
-    const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "" }]);
+  const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "" }]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const params = useParams()
+  const userState = useSelector((state) => state.user);
+  const { status, currentUser, response, error } = userState;
 
-    const userState = useSelector(state => state.user);
-    const { status, currentUser, response, error } = userState;
+  const sclassName = params.id;
+  const adminID = currentUser._id;
+  const address = "Subject";
 
-    const sclassName = params.id
-    const adminID = currentUser._id
-    const address = "Subject"
+  const [showPopup, setShowPopup] = useState(false);
+  const [message, setMessage] = useState("");
+  const [loader, setLoader] = useState(false);
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [message, setMessage] = useState("");
-    const [loader, setLoader] = useState(false)
+  // Handle input change for dynamic fields
+  const handleInputChange = (index, field) => (event) => {
+    const newSubjects = [...subjects];
+    newSubjects[index][field] = event.target.value;
+    setSubjects(newSubjects);
+  };
 
-    const handleSubjectNameChange = (index) => (event) => {
-        const newSubjects = [...subjects];
-        newSubjects[index].subName = event.target.value;
-        setSubjects(newSubjects);
-    };
+  // Add new subject row
+  const handleAddSubject = () => {
+    setSubjects([...subjects, { subName: "", subCode: "", sessions: "" }]);
+  };
 
-    const handleSubjectCodeChange = (index) => (event) => {
-        const newSubjects = [...subjects];
-        newSubjects[index].subCode = event.target.value;
-        setSubjects(newSubjects);
-    };
+  // Remove subject row
+  const handleRemoveSubject = (index) => () => {
+    const newSubjects = [...subjects];
+    newSubjects.splice(index, 1);
+    setSubjects(newSubjects);
+  };
 
-    const handleSessionsChange = (index) => (event) => {
-        const newSubjects = [...subjects];
-        newSubjects[index].sessions = event.target.value || 0;
-        setSubjects(newSubjects);
-    };
+  const fields = { sclassName, subjects, adminID };
 
-    const handleAddSubject = () => {
-        setSubjects([...subjects, { subName: "", subCode: "" }]);
-    };
+  // Submit handler
+  const submitHandler = (event) => {
+    event.preventDefault();
+    setLoader(true);
+    dispatch(addStuff(fields, address));
+  };
 
-    const handleRemoveSubject = (index) => () => {
-        const newSubjects = [...subjects];
-        newSubjects.splice(index, 1);
-        setSubjects(newSubjects);
-    };
+  useEffect(() => {
+    if (status === "added") {
+      navigate("/Admin/subjects");
+      dispatch(underControl());
+      setLoader(false);
+    } else if (status === "failed" || status === "error") {
+      setMessage(response || "Network Error");
+      setShowPopup(true);
+      setLoader(false);
+    }
+  }, [status, navigate, error, response, dispatch]);
 
-    const fields = {
-        sclassName,
-        subjects: subjects.map((subject) => ({
-            subName: subject.subName,
-            subCode: subject.subCode,
-            sessions: subject.sessions,
-        })),
-        adminID,
-    };
-
-    const submitHandler = (event) => {
-        event.preventDefault();
-        setLoader(true)
-        dispatch(addStuff(fields, address))
-    };
-
-    useEffect(() => {
-        if (status === 'added') {
-            navigate("/Admin/subjects");
-            dispatch(underControl())
-            setLoader(false)
-        }
-        else if (status === 'failed') {
-            setMessage(response)
-            setShowPopup(true)
-            setLoader(false)
-        }
-        else if (status === 'error') {
-            setMessage("Network Error")
-            setShowPopup(true)
-            setLoader(false)
-        }
-    }, [status, navigate, error, response, dispatch]);
-
-    return (
+  return (
+    <Box sx={styles.container}>
+      <Card sx={styles.card}>
+        <Typography variant="h4" align="center" sx={{ marginBottom: "20px", fontWeight: "bold" }}>
+          Add Subjects
+        </Typography>
         <form onSubmit={submitHandler}>
-            <Box mb={2}>
-                <Typography variant="h6" >Add Subjects</Typography>
-            </Box>
-            <Grid container spacing={2}>
-                {subjects.map((subject, index) => (
-                    <React.Fragment key={index}>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                label="Subject Name"
-                                variant="outlined"
-                                value={subject.subName}
-                                onChange={handleSubjectNameChange(index)}
-                                sx={styles.inputField}
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                label="Subject Code"
-                                variant="outlined"
-                                value={subject.subCode}
-                                onChange={handleSubjectCodeChange(index)}
-                                sx={styles.inputField}
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                label="Sessions"
-                                variant="outlined"
-                                type="number"
-                                inputProps={{ min: 0 }}
-                                value={subject.sessions}
-                                onChange={handleSessionsChange(index)}
-                                sx={styles.inputField}
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Box display="flex" alignItems="flex-end">
-                                {index === 0 ? (
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        onClick={handleAddSubject}
-                                    >
-                                        Add Subject
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="outlined"
-                                        color="error"
-                                        onClick={handleRemoveSubject(index)}
-                                    >
-                                        Remove
-                                    </Button>
-                                )}
-                            </Box>
-                        </Grid>
-                    </React.Fragment>
-                ))}
-                <Grid item xs={12}>
-                    <Box display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" type="submit" disabled={loader}>
-                            {loader ? (
-                                <CircularProgress size={24} color="inherit" />
-                            ) : (
-                                'Save'
-                            )}
-                        </Button>
-                    </Box>
+          <Grid container spacing={2}>
+            {subjects.map((subject, index) => (
+              <React.Fragment key={index}>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    fullWidth
+                    label="Subject Name"
+                    variant="outlined"
+                    value={subject.subName}
+                    onChange={handleInputChange(index, "subName")}
+                    sx={styles.inputField}
+                    required
+                  />
                 </Grid>
-                <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-            </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    fullWidth
+                    label="Subject Code"
+                    variant="outlined"
+                    value={subject.subCode}
+                    onChange={handleInputChange(index, "subCode")}
+                    sx={styles.inputField}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <TextField
+                    fullWidth
+                    label="Sessions"
+                    variant="outlined"
+                    type="number"
+                    inputProps={{ min: 0 }}
+                    value={subject.sessions}
+                    onChange={handleInputChange(index, "sessions")}
+                    sx={styles.inputField}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={2} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {index === 0 ? (
+                    <IconButton color="primary" onClick={handleAddSubject}>
+                      <Add />
+                    </IconButton>
+                  ) : (
+                    <IconButton color="error" onClick={handleRemoveSubject(index)}>
+                      <Remove />
+                    </IconButton>
+                  )}
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
+          <Box sx={styles.buttonContainer}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddSubject}
+              startIcon={<Add />}
+              sx={styles.addButton}
+            >
+              Add Subject
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              disabled={loader}
+              sx={styles.submitButton}
+            >
+              {loader ? <CircularProgress size={24} color="inherit" /> : "Submit"}
+            </Button>
+          </Box>
         </form>
-    );
-}
+        <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
+      </Card>
+    </Box>
+  );
+};
 
-export default SubjectForm
+export default SubjectForm;
 
+// 🌟 Styles for the Form
 const styles = {
-    inputField: {
-        '& .MuiInputLabel-root': {
-            color: '#838080',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#838080',
-        },
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#f4f6f8",
+    padding: "20px",
+  },
+  card: {
+    width: "90%",
+    maxWidth: "700px",
+    padding: "30px",
+    boxShadow: "0px 6px 15px rgba(0,0,0,0.2)",
+    borderRadius: "12px",
+    backgroundColor: "#fff",
+  },
+  inputField: {
+    "& .MuiInputLabel-root": {
+      color: "#666",
     },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "#ccc" },
+      "&:hover fieldset": { borderColor: "#888" },
+      "&.Mui-focused fieldset": { borderColor: "#1976d2" },
+    },
+  },
+  buttonContainer: {
+    marginTop: "20px",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  addButton: {
+    backgroundColor: "#1976d2",
+    "&:hover": {
+      backgroundColor: "#1565c0",
+    },
+  },
+  submitButton: {
+    backgroundColor: "#2e7d32",
+    "&:hover": {
+      backgroundColor: "#1b5e20",
+    },
+  },
 };
